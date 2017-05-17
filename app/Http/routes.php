@@ -11,6 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    echo "czesc i czolem";
-});
+
+
+Route::get('/article', 'WebController@listAction');
+
+Route::get('/article/{id}','WebController@readAction');
+
+Route::get('/article/edit/{id}','WebController@editAction');
+
