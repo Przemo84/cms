@@ -1,13 +1,12 @@
-<!DOCTYPE html>
-<html>
-<title>Articles - Laravel</title>
-<head>
+@extends('layout')
 
-</head>
-<body>
-<header><h2>List of articles</h2></header>
-<div class="container">
+@section('content')
     <div class="tab-content">
+        <h2>List of articles</h2>
+        <h3>Number of articles:</h3>
+        <form action="create">
+            <input type="submit" value="Create an Article">
+        </form>
         <table>
             <thead>
                 <tr>
@@ -22,10 +21,10 @@
                      <td>{{$article->id}}</td>
                      <td>{{$article->title}}</td>
                      <td>{{$article->content}}</td>
-                     <td><a href="{{'article/'.$article->id}}">READ</a></td>
-                     <td><a href="{{'article/edit/'.$article->id}}">EDIT</a></td>
+                     <td><a href="{{'articles/'.$article->id}}">READ</a></td>
+                     <td><a href="{{'articles/edit/'.$article->id}}">EDIT</a></td>
                      <td>
-                         <form>
+                         <form action="{{'delete/'.$article->id}}">
                             <input type="submit" value="Delete">
                          </form>
                      </td>
@@ -35,7 +34,5 @@
             </tbody>
         </table>
     </div>
+@endsection
 
-</div>
-</body>
-</html>

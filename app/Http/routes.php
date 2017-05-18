@@ -13,9 +13,16 @@
 
 
 
-Route::get('/article', 'WebController@listAction');
+Route::get('articles', 'WebController@listAction');
+Route::post('articles', 'WebController@storeAction');
 
-Route::get('/article/{id}','WebController@readAction');
+Route::get('articles/{article}','WebController@showAction');
 
-Route::get('/article/edit/{id}','WebController@editAction');
+Route::get('articles/edit/{id}','WebController@editAction');
+
+Route::get('delete/{id}','WebController@deleteAction');
+
+Route::get('create','WebController@createAction');
+
+Route::get('test','WebController@testAction');
 
