@@ -14,6 +14,7 @@
 
 
 Route::get('articles', 'WebController@listAction');
+
 Route::post('articles', 'WebController@storeAction');
 
 Route::get('articles/{article}','WebController@showAction');
@@ -26,3 +27,4 @@ Route::get('create','WebController@createAction');
 
 Route::get('test','WebController@testAction');
 
+Route::patch('articles/{id}', 'WebController@updateAction');

@@ -6,13 +6,13 @@
     <form method="POST" action="articles">
         {{csrf_field()}}
 
-        <label>
+        <label>Title:</label>
             <input type="text" name="title">
-        </label>
-        <label>
+
+        <label>Content:</label>
             <input type="text" name="content">
-        </label>
-        <input type="submit" value="Save">
+
+        <input type="submit" value="Save" >
     </form>
 
 @endsection

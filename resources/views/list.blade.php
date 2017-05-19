@@ -3,9 +3,10 @@
 @section('content')
     <div class="tab-content">
         <h2>List of articles</h2>
-        <h3>Number of articles:</h3>
+        <h3>Number of articles: {{$count}}</h3>
         <form action="create">
             <input type="submit" value="Create an Article">
+            <hr>
         </form>
         <table>
             <thead>
@@ -33,6 +34,7 @@
             @endforeach;
             </tbody>
         </table>
+        <hr>
     </div>
 @endsection
 

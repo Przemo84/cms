@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Article;
+use App\ArticleChangeRequest;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Http\Response;
@@ -14,14 +15,17 @@ class WebController extends Controller
     {
         $articles = Article::all();
 
-
-        return view('list', ['articles' => $articles]);
+        $count = Article::all()->count();
+        return view('list', [
+            'articles' => $articles,
+            'count' => $count
+        ]);
     }
 
 
     public function showAction(Article $article) // Posyłając App\Article on się domyśla że chcemy wyciągać z tabeli articles
     {                                            // o takim PRIMARY KEY jak posłano w adresie
-                                        // $id artykułu jest znane bo w widoku list kliknelismy na konkretny artykul ktory to id jest posylany do href=""
+        // $id artykułu jest znane bo w widoku list kliknelismy na konkretny artykul ktory to id jest posylany do href=""
 
 //        $article = Article::find($id);
         $comments = $article->comments;
@@ -39,12 +43,24 @@ class WebController extends Controller
         return view('edit', ['article' => $article]);
     }
 
+    public function updateAction(Request $request, $id)
+    {
+        $article = Article::find($id);
+
+        $article->title = $request->get('title');
+        $article->content = $request->get('content');
+
+        $article->save()->where();
+
+        return redirect('articles');
+
+    }
+
     public function deleteAction($id)
     {
         $article = Article::destroy($id);
 
-
-        return redirect('article');
+        return redirect('articles');
     }
 
     public function createAction()
@@ -53,26 +69,12 @@ class WebController extends Controller
         return view('create');
     }
 
-    public function storeAction(Request $request)
+    public function storeAction(ArticleChangeRequest $request)
     {
-//       $title = $request->get('title');
-//       $content = $request->get('content');
-//
-//       dump($content);die;
 
-       $article = new Article();
+        Article::create($request->all());
 
-       $article->title = $request->get('title');
-       $article->content = $request->get('content');
-
-       $article->save();
-
-        //Odczytaj dane z requesta
-        // Zapisz dane do bady
-        // przekieruj na stronę główna.
-
-
-//        return view('create');
+        return redirect('articles');
     }
 
 

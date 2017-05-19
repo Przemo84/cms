@@ -9,7 +9,8 @@
     <form action=" {{ '../articles' }} ">
         <button type="submit">Back to list</button>
     </form>
-    <br/><br/><br/>
+    <br/><br/>
+    <hr>
     <div class="tab-content">
         <h3>Your comments:</h3>
         @foreach($comments as $comment)
