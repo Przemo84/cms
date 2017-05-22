@@ -15,9 +15,10 @@
 
 Route::get('articles', 'WebController@listAction');
 
-Route::post('articles', 'WebController@storeAction');
+Route::post('articles', 'WebController@storeArticleAction');
+Route::post('articles/{id}', 'WebController@storeCommentaryAction');
 
-Route::get('articles/{article}','WebController@showAction');
+Route::get('articles/{id}','WebController@showAction')->name('show_article');
 
 Route::get('articles/edit/{id}','WebController@editAction');
 
@@ -27,4 +28,4 @@ Route::get('create','WebController@createAction');
 
 Route::get('test','WebController@testAction');
 
-Route::patch('articles/{id}', 'WebController@updateAction');
+Route::put('articles/{id}', 'WebController@updateAction')->name('articles_update');

@@ -7,12 +7,21 @@
         {{csrf_field()}}
 
         <label>Title:</label>
-            <input type="text" name="title">
+        <input type="text" name="title">
 
         <label>Content:</label>
-            <input type="text" name="content">
+        <input type="text" name="content">
 
-        <input type="submit" value="Save" >
+        <input type="submit" value="Save">
     </form>
+
+    <div class="errors">
+        <ul>
+            @foreach($errors->all() as $error)
+               <li> {{$error}}
+            @endforeach
+        </ul>
+
+    </div>
 
 @endsection

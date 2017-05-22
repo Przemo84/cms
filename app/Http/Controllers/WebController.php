@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Article;
-use App\ArticleChangeRequest;
+use App\Commentary;
+use App\Http\Requests\ArticleChangeRequest;
+use App\Http\Requests\CommentChangeRequest;
 use Illuminate\Http\Request;
-use App\Http\Requests;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class WebController extends Controller
 {
@@ -23,11 +24,11 @@ class WebController extends Controller
     }
 
 
-    public function showAction(Article $article) // Posyłając App\Article on się domyśla że chcemy wyciągać z tabeli articles
+    public function showAction($id) // Posyłając App\Article on się domyśla że chcemy wyciągać z tabeli articles
     {                                            // o takim PRIMARY KEY jak posłano w adresie
         // $id artykułu jest znane bo w widoku list kliknelismy na konkretny artykul ktory to id jest posylany do href=""
 
-//        $article = Article::find($id);
+        $article = Article::find($id);
         $comments = $article->comments;
 
         return view('read', [
@@ -45,42 +46,46 @@ class WebController extends Controller
 
     public function updateAction(Request $request, $id)
     {
-        $article = Article::find($id);
-
-        $article->title = $request->get('title');
-        $article->content = $request->get('content');
-
-        $article->save()->where();
+        DB::table('articles')
+            ->where('id', '=', $id)
+            ->update([
+                'title' => $request->get('title'),
+                'content' => $request->get('content')
+            ]);
 
         return redirect('articles');
-
     }
 
     public function deleteAction($id)
     {
-        $article = Article::destroy($id);
+        Article::destroy($id);
 
         return redirect('articles');
     }
 
     public function createAction()
     {
-
         return view('create');
     }
 
-    public function storeAction(ArticleChangeRequest $request)
+    public function storeArticleAction(ArticleChangeRequest $request)
     {
-
         Article::create($request->all());
 
         return redirect('articles');
     }
 
+    public function storeCommentaryAction(CommentChangeRequest $request)
+    {
+
+        Commentary::create($request->all());
+
+        return redirect('read');
+    }
+
 
     public function testAction()
     {
-
         $name = 'Przemo';
         $age = 33;
         $content = Article::pluck('content')->first();
