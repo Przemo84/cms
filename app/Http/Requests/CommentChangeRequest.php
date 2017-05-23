@@ -15,7 +15,7 @@ class CommentChangeRequest extends FormRequest
     {
       return [
         'username' => 'required',
-        'content' => 'required'
+        'comment' => 'required'
       ];
 
     }

@@ -12,11 +12,15 @@ use Illuminate\Support\Facades\DB;
 class WebController extends Controller
 {
 
-    public function listAction()
+    public function listAction(Request $request)
     {
-        $articles = Article::all();
+//        $articles = Article::all();
+        $articles = DB::table('articles')->simplePaginate(
+            $request->query->getInt('limit', 10), ['*'], 'page',
+            $request->query->getInt('page', 1));
 
         $count = Article::all()->count();
+
         return view('list', [
             'articles' => $articles,
             'count' => $count
@@ -24,8 +28,8 @@ class WebController extends Controller
     }
 
 
-    public function showAction($id) // Posyłając App\Article on się domyśla że chcemy wyciągać z tabeli articles
-    {                                            // o takim PRIMARY KEY jak posłano w adresie
+    public function showAction($id)  // Posyłając App\Article on się domyśla że chcemy wyciągać z tabeli articles
+    {                                // o takim PRIMARY KEY jak posłano w adresie
         // $id artykułu jest znane bo w widoku list kliknelismy na konkretny artykul ktory to id jest posylany do href=""
 
         $article = Article::find($id);
@@ -44,6 +48,7 @@ class WebController extends Controller
         return view('edit', ['article' => $article]);
     }
 
+
     public function updateAction(Request $request, $id)
     {
         DB::table('articles')
@@ -55,6 +60,7 @@ class WebController extends Controller
 
         return redirect('articles');
     }
+
 
     public function deleteAction($id)
     {
@@ -68,6 +74,7 @@ class WebController extends Controller
         return view('create');
     }
 
+
     public function storeArticleAction(ArticleChangeRequest $request)
     {
         Article::create($request->all());
@@ -75,12 +82,17 @@ class WebController extends Controller
         return redirect('articles');
     }
 
-    public function storeCommentaryAction(CommentChangeRequest $request)
+
+    public function storeCommentaryAction(CommentChangeRequest $request, $id)
     {
 
-        Commentary::create($request->all());
+        Commentary::create([
+            'article_id' => $id ,
+            'username' => $request->username ,
+            'comment' => $request->comment
+        ]);
 
-        return redirect('read');
+        return redirect('articles/'.$id);
     }
 
 

@@ -2,24 +2,26 @@
 
 @section('content')
 
-    <p><strong>Title:</strong></p>
+    <h3><strong>Title:</strong></h3>
         {{$article->title}} <br/>
-    <p><strong>Content:</strong>:</p>
+    <h3><strong>Content:</strong></h3>
         {{$article->content}}<br/><br/>
-    <form action=" {{ '../articles' }} ">
-        <button type="submit">Back to list</button>
-        <hr>
-    </form>
-    <br/><br/>
-    <div>
-        <form method="POST" action="{{route('show_article', ['id' =>$article->id]) }}">
-            {{csrf_field()}}
 
+    <form action=" {{ '../articles' }} "> {{--TODO poprawić action na route--}}
+        <button type="submit">Back to list</button>
+        <hr><hr>
+    </form>
+
+    <br/>
+    <div>
+        <form method="POST" action="{{route('store_comment', ['id' =>$article->id]) }}">
+            {{csrf_field()}}
+            <h3>Comment this article!</h3>
             <label>Your name:</label>
             <input type="text" name="username" >
             <br/>
             <label>Make your comment:</label>
-            <input type="text" name="content">
+            <input type="text" name="comment">
             <br/>
             <input type="submit" value="Comment!">
             <hr>
@@ -27,15 +29,14 @@
     </div>
     <hr>
 
-
     <div class="tab-content">
         <h3>Your comments:</h3>
         @foreach($comments as $comment)
-            <td> {{$comment->username}} </td> <br/>
-            <td> {{$comment->content}}</td><br/><br/>
+            <td> {{$comment->username}} , <strong>{{$comment->created_at->diffForHumans()}}</strong></td> <br/>
+            <td> {{$comment->comment}}</td><br/><br/>
+
         @endforeach
     </div>
-
 
     <hr>
 @endsection

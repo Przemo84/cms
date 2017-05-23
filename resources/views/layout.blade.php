@@ -6,10 +6,12 @@
     </head>
 
     <body>
-        <div class="container">
+        <div class="container" style="width: 1000px">
 
             @yield('content')
 
         </div>
+
+
     </body>
 </html>

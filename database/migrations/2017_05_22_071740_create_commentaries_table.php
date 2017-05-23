@@ -20,7 +20,7 @@ class CreateCommentariesTable extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
             $table->string('username');
-            $table->text('content');
+            $table->text('comment');
             $table->timestamps();
         });
     }

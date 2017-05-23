@@ -13,10 +13,10 @@
 
 
 
-Route::get('articles', 'WebController@listAction');
+Route::get('articles', 'WebController@listAction')->name('listAll');
 
 Route::post('articles', 'WebController@storeArticleAction');
-Route::post('articles/{id}', 'WebController@storeCommentaryAction');
+Route::post('articles/{id}', 'WebController@storeCommentaryAction')->name('store_comment');
 
 Route::get('articles/{id}','WebController@showAction')->name('show_article');
 
