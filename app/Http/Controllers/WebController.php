@@ -14,10 +14,7 @@ class WebController extends Controller
 
     public function listAction(Request $request)
     {
-//        $articles = Article::all();
-        $articles = DB::table('articles')->simplePaginate(
-            $request->query->getInt('limit', 10), ['*'], 'page',
-            $request->query->getInt('page', 1));
+        $articles = DB::table('articles')->paginate($request->query->getInt('limit', 10));
 
         $count = Article::all()->count();
 
@@ -28,10 +25,8 @@ class WebController extends Controller
     }
 
 
-    public function showAction($id)  // Posyłając App\Article on się domyśla że chcemy wyciągać z tabeli articles
-    {                                // o takim PRIMARY KEY jak posłano w adresie
-        // $id artykułu jest znane bo w widoku list kliknelismy na konkretny artykul ktory to id jest posylany do href=""
-
+    public function showAction($id)
+    {
         $article = Article::find($id);
         $comments = $article->comments;
 
@@ -85,14 +80,13 @@ class WebController extends Controller
 
     public function storeCommentaryAction(CommentChangeRequest $request, $id)
     {
-
         Commentary::create([
-            'article_id' => $id ,
-            'username' => $request->username ,
+            'article_id' => $id,
+            'username' => $request->username,
             'comment' => $request->comment
         ]);
 
-        return redirect('articles/'.$id);
+        return redirect('articles/' . $id);
     }
 
 
