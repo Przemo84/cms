@@ -5,7 +5,9 @@ namespace App;
 
 class Article extends Model
 {
-    public function comments() {
+    public function comments()
+    {
         return $this->hasMany('App\Commentary');
     }
+
 }

@@ -49,12 +49,12 @@
                      </td>
                  </tr>
 
-            @endforeach;
+            @endforeach
             </tbody>
         </table>
         <hr>
-        <div>
-            {!!   $articles->links() !!}
+        <div style="text-align: center">
+            {!!   $articles->links()!!}
         </div>
     </div>
 

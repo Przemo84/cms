@@ -6,63 +6,60 @@ use App\Article;
 use App\Commentary;
 use App\Http\Requests\ArticleChangeRequest;
 use App\Http\Requests\CommentChangeRequest;
+use App\Repositories\ArticleRepository;
+use App\Repositories\CommentaryRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class WebController extends Controller
 {
 
-    public function listAction(Request $request)
+    public function listAction(ArticleRepository $articleRepository, Request $request)
     {
-        $articles = DB::table('articles')->paginate($request->query->getInt('limit', 10));
-
-        $count = Article::all()->count();
+        $articles = $articleRepository->list($request->query->getInt('limit', 10));
 
         return view('list', [
             'articles' => $articles,
-            'count' => $count
+            'count' => Article::all()->count()
         ]);
     }
 
 
-    public function showAction($id)
+    public function showAction(ArticleRepository $articleRepository, $id)
     {
-        $article = Article::find($id);
-        $comments = $article->comments;
+        $article = $articleRepository->show($id);
 
         return view('read', [
             'article' => $article,
-            'comments' => $comments
+            'comments' => $article->comments
         ]);
     }
 
-    public function editAction($id)
+    public function editAction(ArticleRepository $articleRepository, $id)
     {
-        $article = Article::find($id);
+        $article = $articleRepository->edit($id);
 
         return view('edit', ['article' => $article]);
     }
 
 
-    public function updateAction(Request $request, $id)
+    public function updateAction(ArticleRepository $articleRepository, Request $request, $id)
     {
-        DB::table('articles')
-            ->where('id', '=', $id)
-            ->update([
-                'title' => $request->get('title'),
-                'content' => $request->get('content')
-            ]);
+        $articleRepository->update(
+            $id,
+            $request->get('title'),
+            $request->get('content') );
 
         return redirect('articles');
     }
 
 
-    public function deleteAction($id)
+    public function deleteAction(ArticleRepository $articleRepository, $id)
     {
-        Article::destroy($id);
+        $articleRepository->delete($id);
 
         return redirect('articles');
     }
+
 
     public function createAction()
     {
@@ -70,33 +67,35 @@ class WebController extends Controller
     }
 
 
-    public function storeArticleAction(ArticleChangeRequest $request)
+    public function storeArticleAction(ArticleRepository $articleRepository, ArticleChangeRequest $request)
     {
-        Article::create($request->all());
+        $articleRepository-> create($request->all());
 
         return redirect('articles');
     }
 
 
-    public function storeCommentaryAction(CommentChangeRequest $request, $id)
+    public function storeCommentaryAction(CommentaryRepository $commentaryRepository,CommentChangeRequest $request, $id)
     {
-        Commentary::create([
-            'article_id' => $id,
-            'username' => $request->username,
-            'comment' => $request->comment
-        ]);
+        $commentaryRepository->create($id,
+            $request->username,
+            $request->comment
+            );
 
         return redirect('articles/' . $id);
     }
 
 
-    public function testAction()
+    public function testAction(ArticleRepository $articleRepository, Request $request)
     {
-        $name = 'Przemo';
-        $age = 33;
-        $content = Article::pluck('content')->first();
+        $articleRepository = $articleRepository->list($request->query->getInt('limit', 3));
 
-        return view('testview', compact('name', 'age', 'content'));
+
+//        $name = 'Przemo';
+//        $age = 33;
+//        $content = Article::pluck('content')->first();
+//        return view('testview', compact('name', 'age', 'content'));
+        return view('testview', compact('articleRepository'));
     }
 
 }

@@ -15,9 +15,6 @@
 
 Route::get('articles', 'WebController@listAction')->name('listAll');
 
-Route::post('articles', 'WebController@storeArticleAction');
-Route::post('articles/{id}', 'WebController@storeCommentaryAction')->name('store_comment');
-
 Route::get('articles/{id}','WebController@showAction')->name('show_article');
 
 Route::get('articles/edit/{id}','WebController@editAction');
@@ -29,3 +26,6 @@ Route::get('create','WebController@createAction');
 Route::get('test','WebController@testAction');
 
 Route::put('articles/{id}', 'WebController@updateAction')->name('articles_update');
+
+Route::post('articles', 'WebController@storeArticleAction');
+Route::post('articles/{id}', 'WebController@storeCommentaryAction')->name('store_comment');

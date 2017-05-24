@@ -37,6 +37,12 @@
 
         @endforeach
     </div>
-
+    <div class="errors" style="text-align: center; color:red">
+        <ul>
+            @foreach($errors->all() as $error)
+                <li> {{$error}}
+            @endforeach
+        </ul>
+    </div>
     <hr>
 @endsection

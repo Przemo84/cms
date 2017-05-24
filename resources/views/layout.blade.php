@@ -9,6 +9,7 @@
         <div class="container" style="width: 1000px">
 
             @yield('content')
+            @yield('errors')
 
         </div>
 

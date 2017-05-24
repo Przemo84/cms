@@ -15,13 +15,12 @@
         <input type="submit" value="Save">
     </form>
 
-    <div class="errors">
+    <div class="errors" style="text-align: center;color: red">
         <ul>
             @foreach($errors->all() as $error)
                <li> {{$error}}
             @endforeach
         </ul>
-
     </div>
 
 @endsection
