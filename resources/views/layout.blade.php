@@ -6,10 +6,9 @@
     </head>
 
     <body>
-        <div class="container" style="width: 1000px">
+        <div class="container" style="width: 1200px">
 
             @yield('content')
-            @yield('errors')
 
         </div>
 

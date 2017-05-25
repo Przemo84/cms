@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('content')
-    <div class="tab-content" style="width: 1000px">
+    <div class="tab-content" style="width: 1200px">
         <h2>List of articles</h2>
         <h3>Number of articles: {{$count}}</h3>
         <div style="float: left; margin-right: 100px">
@@ -10,7 +10,7 @@
              </form>
         </div>
         <div style="float: left"></div>
-        <div id = "paging" style="float: left; padding-right: 200px">
+        <div id = "paging" style="float: left; padding-right: 180px">
             Select number of articles per page:
             <form id="formPerPage">
                 <select id="selectPerPage" name="limit">
@@ -22,6 +22,14 @@
                     <option value="25">25</option>
                     <option value="50">50</option>
                 </select>
+            </form>
+        </div>
+        <div style="float: left; padding-right: 150px">
+            <form id="filterForm">
+                <label>
+                    <input type="text" name="filter">
+                </label>
+                <input type="submit" value="Filter">
             </form>
         </div>
         <div style="clear: both"></div>
@@ -54,7 +62,7 @@
         </table>
         <hr>
         <div style="text-align: center">
-            {!!   $articles->links()!!}
+            {{   $articles->appends(['limit'=> $limit])->links()  }}
         </div>
     </div>
 

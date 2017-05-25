@@ -10,6 +10,15 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+$api = app('Dingo\Api\Routing\Router');
+
+
+$api->version('v1', function ($api) {
+    $api->get('test', function (){
+
+
+    });
+});
 
 
 
@@ -23,9 +32,11 @@ Route::get('delete/{id}','WebController@deleteAction');
 
 Route::get('create','WebController@createAction');
 
-Route::get('test','WebController@testAction');
-
 Route::put('articles/{id}', 'WebController@updateAction')->name('articles_update');
 
 Route::post('articles', 'WebController@storeArticleAction');
 Route::post('articles/{id}', 'WebController@storeCommentaryAction')->name('store_comment');
+
+
+
+Route::get('testy','WebController@testAction');

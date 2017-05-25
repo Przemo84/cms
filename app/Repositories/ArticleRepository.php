@@ -14,12 +14,21 @@ class ArticleRepository
     }
 
 
-    public function list($limit)
+    public function list($limit = null, $filter = null)
     {
+        if ($filter == null) {
 
-        return $this->model->paginate($limit);
+            return $this->model->paginate($limit);
+
+        }
+        return $this->model
+            ->where('title', 'LIKE', "%{$filter}%")
+            ->orderBy('title', 'asc')
+            ->paginate($limit);
+
 
     }
+
 
     public function show($id)
     {
@@ -27,10 +36,12 @@ class ArticleRepository
 
     }
 
+
     public function edit($id)
     {
         return $this->model->find($id);
     }
+
 
     public function update($id, $title = null, $content = null)
     {
@@ -42,10 +53,12 @@ class ArticleRepository
             ]);
     }
 
+
     public function delete($id)
     {
         return $this->model->destroy($id);
     }
+
 
     public function create($all)
     {

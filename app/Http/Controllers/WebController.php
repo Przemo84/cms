@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Article;
-use App\Commentary;
 use App\Http\Requests\ArticleChangeRequest;
 use App\Http\Requests\CommentChangeRequest;
 use App\Repositories\ArticleRepository;
@@ -15,11 +14,16 @@ class WebController extends Controller
 
     public function listAction(ArticleRepository $articleRepository, Request $request)
     {
-        $articles = $articleRepository->list($request->query->getInt('limit', 10));
+
+        $articles = $articleRepository->list(
+            $request->query->getInt('limit', 10),
+            $request->query->get('filter')
+        );
 
         return view('list', [
             'articles' => $articles,
-            'count' => Article::all()->count()
+            'count' => Article::all()->count(),
+            'limit' => $request->query->getInt('limit', 10)
         ]);
     }
 
@@ -47,7 +51,7 @@ class WebController extends Controller
         $articleRepository->update(
             $id,
             $request->get('title'),
-            $request->get('content') );
+            $request->get('content'));
 
         return redirect('articles');
     }
@@ -69,18 +73,18 @@ class WebController extends Controller
 
     public function storeArticleAction(ArticleRepository $articleRepository, ArticleChangeRequest $request)
     {
-        $articleRepository-> create($request->all());
+        $articleRepository->create($request->all());
 
         return redirect('articles');
     }
 
 
-    public function storeCommentaryAction(CommentaryRepository $commentaryRepository,CommentChangeRequest $request, $id)
+    public function storeCommentaryAction(CommentaryRepository $commentaryRepository, CommentChangeRequest $request, $id)
     {
         $commentaryRepository->create($id,
             $request->username,
             $request->comment
-            );
+        );
 
         return redirect('articles/' . $id);
     }
@@ -88,6 +92,7 @@ class WebController extends Controller
 
     public function testAction(ArticleRepository $articleRepository, Request $request)
     {
+
         $articleRepository = $articleRepository->list($request->query->getInt('limit', 3));
 
 
