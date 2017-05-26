@@ -14,11 +14,22 @@ $api = app('Dingo\Api\Routing\Router');
 
 
 $api->version('v1', function ($api) {
-    $api->get('test', function (){
 
+    $api->group(['namespace' => 'App\Api\Http\Controllers'], function ($api) {
+
+        $api->get('articles','ArticlesController@indexAction');
+        $api->get('articles/{id}','ArticlesController@showAction');
+        $api->delete('articles/{id}','ArticlesController@deleteAction');
+        $api->put('articles/{id}', 'ArticlesController@updateAction');
+        $api->post('articles', 'ArticlesController@createAction');
 
     });
 });
+
+
+//Route::bind('authenticator', function ($authenticator) {
+//    return \Auth::guard($authenticator);
+//});
 
 
 
@@ -40,3 +51,6 @@ Route::post('articles/{id}', 'WebController@storeCommentaryAction')->name('store
 
 
 Route::get('testy','WebController@testAction');
+Route::auth();
+
+Route::get('/home', 'HomeController@index');

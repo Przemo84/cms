@@ -8,7 +8,9 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
         "barryvdh/laravel-ide-helper": "^2.3",
-        "dingo/api": "1.0.*@dev"
+        "dingo/api": "1.0.*@dev",
+        "tymon/jwt-auth": "0.5.*",
+        "league/fractal": "^0.16.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

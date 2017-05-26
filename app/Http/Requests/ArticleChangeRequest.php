@@ -14,7 +14,7 @@ class ArticleChangeRequest extends FormRequest
     public function rules()
     {
       return [
-        'title' => 'required|min:3',
+        'title' => 'required',
         'content' => 'required'
       ];
 
