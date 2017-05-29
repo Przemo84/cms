@@ -17,7 +17,5 @@ class ArticleChangeRequest extends FormRequest
         'title' => 'required',
         'content' => 'required'
       ];
-
     }
-
 }

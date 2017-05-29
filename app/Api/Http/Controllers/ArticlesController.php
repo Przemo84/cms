@@ -5,6 +5,7 @@ namespace App\Api\Http\Controllers;
 use App\Api\Http\Transformers\ArticleTransformer;
 use App\Http\Requests\ArticleChangeRequest;
 use App\Repositories\ArticleRepository;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 
 class ArticlesController extends BaseController
@@ -16,8 +17,11 @@ class ArticlesController extends BaseController
      */
     public function indexAction(ArticleRepository $articleRepository)
     {
-        return  $articleRepository->list();
+        $articles = $articleRepository->list();
+
+        return $this->response()->paginator($articles, new ArticleTransformer());
     }
+
 
     /**
      * @param ArticleRepository $articleRepository
@@ -26,10 +30,14 @@ class ArticlesController extends BaseController
      */
     public function showAction(ArticleRepository $articleRepository, $id)
     {
-
         $article = $articleRepository->show($id);
-        return $this->response->item($article, new ArticleTransformer())->statusCode(200) ;
+
+        if (!$article) {
+            throw new NotFoundHttpException("Requested resource doesn't exist");
+        }
+        return $this->response->item($article, new ArticleTransformer());
     }
+
 
     /**
      * @param ArticleRepository $articleRepository
@@ -38,10 +46,14 @@ class ArticlesController extends BaseController
      */
     public function deleteAction(ArticleRepository $articleRepository, $id)
     {
+        if (!$articleRepository->show($id)) {
+            throw new NotFoundHttpException("Requested resource doesn't exist");
+        }
         $articleRepository->delete($id);
 
         return $this->response->noContent();
     }
+
 
     /**
      * @param ArticleRepository $articleRepository
@@ -51,11 +63,11 @@ class ArticlesController extends BaseController
      */
     public function updateAction(ArticleRepository $articleRepository, ArticleChangeRequest $request, $id)
     {
-        $requestBody = json_decode($request->getContent(), true);
-        $articleRepository->update($id,$requestBody['title'],$requestBody['content']);
+        $articleRepository->update($id, $request->get('title'), $request->get('content'));
 
         return $this->response->noContent()->statusCode(200);
     }
+
 
     /**
      * @param ArticleRepository $articleRepository
@@ -67,7 +79,6 @@ class ArticlesController extends BaseController
         $articleRepository->create($request->all());
 
         return $this->response->noContent()->statusCode(204);
-
     }
 
 
