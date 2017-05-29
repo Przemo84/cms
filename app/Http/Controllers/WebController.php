@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Api\Http\Transformers\ArticleTransformer;
 use App\Article;
+use App\Http\Requests\ArticleChangeRequest;
 use App\Http\Requests\CommentaryChangeRequest;
 use App\Http\Requests\CommentChangeRequest;
 use App\Repositories\ArticleRepository;
@@ -71,7 +73,7 @@ class WebController extends Controller
     }
 
 
-    public function storeArticleAction(ArticleRepository $articleRepository, CommentaryChangeRequest $request)
+    public function storeArticleAction(ArticleRepository $articleRepository, ArticleChangeRequest $request)
     {
         $articleRepository->create($request->all());
 
