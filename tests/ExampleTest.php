@@ -1,5 +1,7 @@
 <?php
 
+use App\Api\Http\Transformers\ArticleTransformer;
+use Faker\Factory;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -7,7 +9,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 class ExampleTest extends TestCase
 {
 
-    use DatabaseTransactions;
+//    use DatabaseTransactions;
 
     /**
      * A basic functional test example.
@@ -20,35 +22,81 @@ class ExampleTest extends TestCase
             ->see('Your Application\'s Landing Page.');
     }
 
-    // WEB test
-    // article and comment form tests
-    public function testFillingArticleForm()
+    // WEB TESTS
+
+    public function testVisitPage()
+    {
+        $this->visit('articles')
+            ->see('List of articles');
+    }
+
+    public function testEditPage()
+    {
+        $this->visit('articles')
+            ->click('EDIT')
+            ->seePageIs('articles/edit/1');
+    }
+
+
+    /* Metoda służąca jako "dostawca" danych testowych - DataProvider z której korzystają poniższe metody(dot.Articles) */
+    public function articleDataProvider()
+    {
+        $faker = Factory::create();
+        return [
+            [
+                $faker->state,
+                $faker->city,
+            ]
+        ];
+    }
+
+    /* Metoda służąca jako "dostawca" danych testowych - DataProvider z której korzystają poniższe metody (dot.Komentarzy)*/
+    public function commentDataProvider()
+    {
+        $faker = Factory::create();
+
+        return [
+            [
+                $faker->firstNameMale,
+                $faker->sentence(7),
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider articleDataProvider
+     */
+    public function testFillingArticleForm($title, $content)  // pobiera w kolejności wartości zwracane przez articleDataProvider()
     {
         $this->visit('create')
-            ->type("Uaaaaa aaa", "title")
-            ->type("Kotki dwa", "content")
+            ->type($title, "title")
+            ->type($content, "content")
             ->press('Save')
             ->seePageIs('articles');
     }
 
-    public function testFillingUpdateArticleForm()
+
+    /**
+     * @dataProvider articleDataProvider
+     */
+    public function testFillingUpdateArticleForm($title, $content)
     {
-        $this->visit('articles/edit/6')
-            ->type("Uaaaaa aaa", "title")
-            ->type("Kotki dwa", "content")
+        $this->visit('articles/edit/1')
+            ->type($title, "title")
+            ->type($content, "content")
             ->press('Save')
             ->seePageIs('articles');
     }
 
-    public function testFillingCommentForm()
+
+    public function testFillingCommentForm() // pobiera w kolejności wartości zwracane przez commentDataProvider()
     {
-        $this->visit('articles/2')
+        $this->visit('articles/1')
             ->type("Autor komentarza", 'username')
             ->type("Komentarz z dupy", 'comment')
             ->press("Comment!")
-            ->seePageIs('articles/2');
+            ->seePageIs('articles/1');
     }
-
 
     public function testFilter()
     {
@@ -58,19 +106,86 @@ class ExampleTest extends TestCase
             ->seePageIs('articles?filter=ad');
     }
 
-    //database tests
 
-    public function testIfDataExistInDB()
+    //DATABASE TESTS
+
+    /**
+     * @dataProvider articleDataProvider
+     */
+    public function testCreatingNewArticle($title, $content)
     {
-        $this->seeInDatabase('articles', ['title' => 'POLSKA']);
+        $this->visit('create')
+            ->type($title, "title")
+            ->type("$content", "content")
+            ->press('Save')
+            ->seeInDatabase('articles', [
+                'title' => $title,
+                'content' => $content
+            ]);
     }
 
-    // zrobić testy wg wzorca
+    /* Można też bezpośrednio wpisć dane testowe, ale dzięki DataProvider jest rozdzielone*/
+//    public function testCreatingNewArticle()
+//    {
+//        $this->visit('create')
+//            ->type("ZZZ", "title")
+//            ->type("XXX", "content")
+//            ->press('Save')
+//            ->seeInDatabase('articles', [
+//                'title' => 'ZZZ',
+//                'content' => 'XXX',
+//            ]);
+//    }
 
+
+    /**
+     * @dataProvider commentDataProvider
+     */
+    public function testCreatingNewComment($username, $comment)
+    {
+        $this->visit('articles/1')
+            ->type($username, "username")
+            ->type($comment, "comment")
+            ->press('Comment!')
+            ->seeInDatabase('commentaries', [
+                'username' => $username,
+                'comment' => $comment
+            ]);
+    }
+
+
+    //API
+
+    public function testHasJsonResponse()
+    {
+        $this->get('/api/articles/1')
+            ->seeJsonStructure([
+                '*' => [
+                    'title',
+                    'content'
+                ]
+            ]);
+    }
+
+
+//    public function testAAA()
+//    {
+//        // Given
+//
+//        $article = new \App\Article([
+//            'title' => "tata",
+//            'content' => "mama"
+//        ]);
+//
+//        //When
+//        $this->$article->create();
+//
+//
+//    }
+
+    // spróbować napisać test wg wzorca
     // Given
-
     // When
-
     // Then
 
 }

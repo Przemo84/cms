@@ -11,9 +11,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Article::class,15)->create()->each(function ($article){
-           $article->comments()->save(factory(App\Commentary::class)->make());
-        });
-//        factory(\App\Commentary::class,20)->create();
+        factory(\App\Article::class, 15)
+            ->create()
+            ->each(function ($article) {
+                $article->comments()
+                    ->save(factory(App\Commentary::class)
+                        ->make());
+            });
     }
 }

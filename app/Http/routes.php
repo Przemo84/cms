@@ -36,7 +36,7 @@ Route::get('articles/{id}','WebController@showAction')->name('show_article');
 
 Route::get('articles/edit/{id}','WebController@editAction');
 
-Route::get('delete/{id}','WebController@deleteAction');
+Route::get('delete/{id}','WebController@deleteAction')->name('delete_action');
 
 Route::get('create','WebController@createAction');
 
