@@ -19,6 +19,12 @@ class ArticleRepository
     }
 
 
+    public function xxx()
+    {
+        return "kakkaa";
+    }
+
+
     /**
      * @param null $limit
      * @param null $filter
