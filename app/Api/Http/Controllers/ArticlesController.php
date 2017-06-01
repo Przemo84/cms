@@ -19,8 +19,7 @@ class ArticlesController extends BaseController
     {
         $articles = $articleRepository->list();
 
-        dump($articles);die;
-
+//        dump($articles);die;
 
         return $this->response()->paginator($articles, new ArticleTransformer());
     }
@@ -66,7 +65,6 @@ class ArticlesController extends BaseController
      */
     public function updateAction(ArticleRepository $articleRepository, ArticleChangeRequest $request, $id)
     {
-        dump($request);die;
 
         $articleRepository->update($id, $request->get('title'), $request->get('content'));
 
@@ -83,7 +81,7 @@ class ArticlesController extends BaseController
     {
         $articleRepository->create($request->all());
 
-        return $this->response->noContent()->statusCode(204);
+        return $this->response->noContent()->statusCode(201);
     }
 
 

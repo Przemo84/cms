@@ -95,14 +95,17 @@ class WebController extends Controller
     public function testAction(ArticleRepository $articleRepository, Request $request)
     {
 
-        $articleRepository = $articleRepository->list($request->query->getInt('limit', 3));
+//        $articleRepository = $articleRepository->list($request->query->getInt('limit', 3));
 
 
-//        $name = 'Przemo';
-//        $age = 33;
-//        $content = Article::pluck('content')->first();
+        $name = 'Przemo';
+        $age = 33;
+        $content = Article::pluck('content')->first();
 //        return view('testview', compact('name', 'age', 'content'));
-        return view('testview', compact('articleRepository'));
+        yield $name;
+
+        return $name;
+//        return view('testview', compact('articleRepository'));
     }
 
 }
